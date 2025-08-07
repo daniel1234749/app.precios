@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Lista de Precios - Supermercado Emanuel</title>
+    <!-- Tailwind CSS CDN para estilos rápidos y responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Enlaza tu archivo de estilos personalizado -->
+    <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+   
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Lista de Precios Mayorista Emanuel</h1>
+
+        <div class="search-container">
+            <!-- ID del input de búsqueda ajustado a 'input-buscar' -->
+            <input type="text" id="input-buscar" class="search-input" placeholder="Buscar por código o descripción...">
+            
+            <!-- El select de criterio de búsqueda se mantiene, aunque tu JS actual no lo usa directamente para el filtro -->
+            <select id="searchCriteria" class="filter-select">
+                <option value="description">Descripción</option>
+                <option value="code">Código</option>
+            </select>
+        </div>
+
+        <!-- La tabla donde se mostrarán los productos, con ID 'tabla-productos' -->
+        <div class="overflow-x-auto"> <!-- Para desplazamiento horizontal en pantallas pequeñas -->
+            <table id="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas de productos se insertarán aquí por JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- El mensaje de no resultados, con ID 'noResults' -->
+        <div id="noResults" class="no-results hidden">
+            No se encontraron productos que coincidan con tu búsqueda.
+        </div>
+    </div>
+
+    <!-- JavaScript al final para que cargue después del DOM -->
+   <script src="app.js"></script>
+
+</body>
+</html>
