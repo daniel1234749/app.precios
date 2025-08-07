@@ -5,52 +5,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let productosCargados = [];
 
-    // Función para mostrar los productos en la tabla
+    // Función para mostrar productos de forma rápida usando innerHTML en bloque
     const mostrarProductos = (productos) => {
-        if (!tabla) {
-            console.error("Error: El elemento con ID 'tabla-productos' no se encontró en el DOM.");
-            return;
-        }
         const tbody = tabla.querySelector('tbody');
-        if (!tbody) {
-            console.error("Error: El elemento <tbody> no se encontró dentro de la tabla.");
-            return;
-        }
-        tbody.innerHTML = ""; // Limpiar el tbody
-
-        if (productos.length === 0) {
-            noResultsDiv.classList.remove('hidden');
-            return;
-        }
-        noResultsDiv.classList.add('hidden');
-
-        productos.forEach(producto => {
-            const fila = document.createElement("tr");
-
-            // Convertir el precio a número y reemplazar la coma por punto si es necesario
-            // Acceder a 'Precio' con 'P' mayúscula
+        tbody.innerHTML = productos.map(producto => {
             const precioNumerico = parseFloat(String(producto.Precio).replace(',', '.'));
-
-            fila.innerHTML = `
-                <td>${producto.id}</td>
-                <td>${producto.nombre}</td>
-                <td>$${precioNumerico.toFixed(2)}</td>
+            return `
+                <tr>
+                    <td>${producto.id}</td>
+                    <td>${producto.nombre}</td>
+                    <td>$${precioNumerico.toFixed(2)}</td>
+                </tr>
             `;
+        }).join('');
 
-            tbody.appendChild(fila);
-        });
+        // Mostrar/ocultar mensaje de "sin resultados"
+        noResultsDiv.classList.toggle('hidden', productos.length > 0);
     };
 
-    // Buscar productos por código o descripción
+    // Función para filtrar productos
     const filtrarProductos = (termino) => {
         const filtro = termino.toLowerCase();
 
         const resultados = productosCargados.filter(p =>
-            String(p.id).includes(filtro) ||
-            p.nombre.toLowerCase().includes(filtro)
+            p.idStr.includes(filtro) ||
+            p.nombreLower.includes(filtro)
         );
 
         mostrarProductos(resultados);
+    };
+
+    // Función debounce para optimizar el buscador
+    const debounce = (fn, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn(...args), delay);
+        };
     };
 
     // Cargar JSON al iniciar
@@ -62,22 +53,25 @@ document.addEventListener("DOMContentLoaded", () => {
             return res.json();
         })
         .then(data => {
-            productosCargados = data;
+            // Preprocesar datos para búsquedas rápidas
+            productosCargados = data.map(p => ({
+                ...p,
+                idStr: String(p.id),
+                nombreLower: p.nombre.toLowerCase()
+            }));
             mostrarProductos(productosCargados);
         })
         .catch(err => {
             console.error("Error al cargar productos.json", err);
-            if (noResultsDiv) {
-                noResultsDiv.classList.remove('hidden');
-                noResultsDiv.textContent = 'Error al cargar la lista de precios. Por favor, inténtalo de nuevo más tarde.';
-            }
+            noResultsDiv.classList.remove('hidden');
+            noResultsDiv.textContent = 'Error al cargar la lista de precios. Por favor, inténtalo de nuevo más tarde.';
         });
 
-    // Evento de búsqueda en tiempo real
+    // Evento de búsqueda con debounce
     if (inputBuscar) {
-        inputBuscar.addEventListener("input", (e) => {
+        inputBuscar.addEventListener("input", debounce((e) => {
             filtrarProductos(e.target.value);
-        });
+        }, 200)); // 200 ms de espera
     } else {
         console.error("Error: El elemento con ID 'input-buscar' no se encontró en el DOM.");
     }
