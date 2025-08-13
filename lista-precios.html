@@ -11,45 +11,54 @@
 </head>
 <body>
    
-    <div class="container">
+    <div class="container mx-auto p-4">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
             Lista de Precios Emanuel
         </h1>
 
-        <div class="search-container">
-            <!-- ID del input de búsqueda ajustado a 'input-buscar' -->
-            <input type="text" id="input-buscar" class="search-input" placeholder="Buscar por código o descripción...">
+        <div class="search-container flex flex-wrap gap-2 mb-4">
+            <!-- Input de búsqueda -->
+            <input 
+                type="text" 
+                id="input-buscar" 
+                class="search-input border border-gray-300 p-2 rounded w-full sm:w-auto flex-grow" 
+                placeholder="Buscar por código o descripción..."
+            >
             
-            <!-- El select de criterio de búsqueda se mantiene, aunque tu JS actual no lo usa directamente para el filtro -->
-            <select id="searchCriteria" class="filter-select">
-                <option value="description">Descripción</option>
-                <option value="code">Código</option>
-            </select>
+            <!-- Select de criterio -->
+            
+
+            <!-- Botón Buscar -->
+            <button 
+                id="btn-buscar" 
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Buscar
+            </button>
         </div>
 
-        <!-- La tabla donde se mostrarán los productos -->
+        <!-- Tabla de productos -->
         <div class="overflow-x-auto">
-            <table id="tabla-productos">
-                <thead>
+            <table id="tabla-productos" class="min-w-full border border-gray-300">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th>Código</th>
-                        <th>Descripción</th>
-                        <th>Precio</th>
+                        <th class="border border-gray-300 px-4 py-2">Código</th>
+                        <th class="border border-gray-300 px-4 py-2">Descripción</th>
+                        <th class="border border-gray-300 px-4 py-2">Precio</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Las filas de productos se insertarán aquí por JavaScript -->
+                    <!-- Filas insertadas por JavaScript -->
                 </tbody>
             </table>
         </div>
 
-        <!-- El mensaje de no resultados -->
-        <div id="noResults" class="no-results hidden">
+        <!-- Mensaje de no resultados -->
+        <div id="noResults" class="no-results hidden mt-4 text-center text-red-600 font-semibold">
             No se encontraron productos que coincidan con tu búsqueda.
         </div>
     </div>
 
-    <!-- JavaScript al final para que cargue después del DOM -->
+    <!-- JavaScript -->
     <script src="app.js"></script>
 </body>
 </html>
