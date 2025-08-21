@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const mostrarProductos = (productos) => {
         const tbody = tabla.querySelector('tbody');
         tbody.innerHTML = productos.map(producto => {
-            const precioNumerico = parseFloat(String(producto.Precio).replace(',', '.'));
+           const precioNumerico = parseFloat(String(producto.precio).replace(',', '.'));
+
             return `
                 <tr>
                     <td>${producto.id}</td>
